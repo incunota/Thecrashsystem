@@ -1,0 +1,1061 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Testador de Lag Infinito - Multiplicação Sem Limites</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #000000, #0a0a2a, #1a0033);
+            color: #fff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            padding: 30px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(to right, #ff0000, #ff5500, #ffaa00, #ffff00, #aaff00);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            animation: rainbow 3s infinite linear;
+        }
+        
+        @keyframes rainbow {
+            0% { filter: hue-rotate(0deg); }
+            100% { filter: hue-rotate(360deg); }
+        }
+        
+        .subtitle {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            margin-bottom: 20px;
+            color: #ff9900;
+        }
+        
+        .controls {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 0, 0, 0.3);
+        }
+        
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+        }
+        
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn-start {
+            background: linear-gradient(to right, #ff0000, #ff5500);
+            color: white;
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+        }
+        
+        .btn-start:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.7);
+        }
+        
+        .btn-stop {
+            background: linear-gradient(to right, #0000ff, #0088ff);
+            color: white;
+            box-shadow: 0 0 20px rgba(0, 0, 255, 0.5);
+        }
+        
+        .btn-stop:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 255, 0.7);
+        }
+        
+        .btn-clear {
+            background: linear-gradient(to right, #aa00ff, #ff00ff);
+            color: white;
+            box-shadow: 0 0 20px rgba(170, 0, 255, 0.5);
+        }
+        
+        .btn-clear:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(170, 0, 255, 0.7);
+        }
+        
+        .multiplier-container {
+            background: rgba(255, 0, 0, 0.2);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 20px 0;
+            border: 2px solid rgba(255, 0, 0, 0.5);
+            text-align: center;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); }
+            70% { box-shadow: 0 0 0 20px rgba(255, 0, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+        }
+        
+        .multiplier-value {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #ff0000;
+            text-shadow: 0 0 30px #ff0000;
+            margin: 10px 0;
+        }
+        
+        .phase-display {
+            font-size: 1.5rem;
+            color: #ffaa00;
+        }
+        
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 25px;
+        }
+        
+        .stat-box {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-value {
+            font-size: 2.8rem;
+            font-weight: bold;
+            color: #00ffaa;
+            text-shadow: 0 0 15px rgba(0, 255, 170, 0.7);
+        }
+        
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+        
+        .scene-container {
+            position: relative;
+            width: 100%;
+            height: 700px;
+            background: rgba(0, 0, 0, 0.8);
+            border-radius: 15px;
+            overflow: hidden;
+            border: 2px solid rgba(255, 0, 0, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
+            margin-bottom: 30px;
+        }
+        
+        #scene {
+            width: 100%;
+            height: 100%;
+        }
+        
+        .warning {
+            background: rgba(255, 0, 0, 0.3);
+            border: 2px solid #ff0000;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            animation: warningFlash 1s infinite;
+        }
+        
+        @keyframes warningFlash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .warning i {
+            font-size: 2rem;
+            color: #ff0000;
+        }
+        
+        .generation-info {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 10px;
+        }
+        
+        .info-item {
+            flex: 1;
+            min-width: 200px;
+            padding: 10px;
+            background: rgba(255, 100, 0, 0.2);
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .apocalypse-indicator {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 0, 0, 0.7);
+            z-index: 9999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            font-size: 4rem;
+            text-align: center;
+            animation: apocalypsePulse 0.5s infinite;
+        }
+        
+        @keyframes apocalypsePulse {
+            0% { background: rgba(255, 0, 0, 0.7); }
+            50% { background: rgba(255, 0, 0, 0.9); }
+            100% { background: rgba(255, 0, 0, 0.7); }
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            border-top: 1px solid rgba(255, 0, 0, 0.3);
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        .crash-prediction {
+            background: rgba(255, 0, 0, 0.4);
+            padding: 10px;
+            border-radius: 10px;
+            margin-top: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .log-container {
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 0.9rem;
+        }
+        
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 5px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .button-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+            
+            .scene-container {
+                height: 400px;
+            }
+            
+            .multiplier-value {
+                font-size: 2.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="apocalypseIndicator" class="apocalypse-indicator">
+        <div style="font-size: 5rem; margin-bottom: 20px;">💀☠️💀</div>
+        <div>COLAPSO TOTAL DO NAVEGADOR</div>
+        <div style="font-size: 2rem; margin-top: 20px;">Multiplicador: <span id="apocalypseMultiplier">∞</span>x</div>
+    </div>
+    
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-infinity"></i> TESTADOR DE LAG INFINITO</h1>
+            <p class="subtitle">MULTIPLICAÇÃO EXPONENCIAL SEM LIMITES - A cada 5 segundos, a produção DOBRA PARA SEMPRE!</p>
+        </header>
+        
+        <main>
+            <div class="controls">
+                <div class="button-container">
+                    <button id="startBtn" class="btn btn-start">
+                        <i class="fas fa-skull-crossbones"></i> INICIAR APOCALIPSE
+                    </button>
+                    <button id="stopBtn" class="btn btn-stop">
+                        <i class="fas fa-hand-paper"></i> TENTAR PARAR
+                    </button>
+                    <button id="clearBtn" class="btn btn-clear">
+                        <i class="fas fa-trash-alt"></i> LIMPAR TUDO (0)
+                    </button>
+                </div>
+                
+                <div class="multiplier-container">
+                    <div class="stat-label">MULTIPLICADOR ATUAL (INFINITO)</div>
+                    <div id="multiplierValue" class="multiplier-value">1x</div>
+                    <div class="phase-display">
+                        Gerando <span id="blocksPerTick">10</span> blocos a cada 50ms
+                        <br>
+                        (<span id="blocksPerSecond">200</span> blocos/segundo)
+                    </div>
+                </div>
+                
+                <div class="stats">
+                    <div class="stat-box">
+                        <div id="blockCount" class="stat-value">0</div>
+                        <div class="stat-label">BLOCOS NA CENA</div>
+                    </div>
+                    <div class="stat-box">
+                        <div id="totalGenerated" class="stat-value">0</div>
+                        <div class="stat-label">TOTAL GERADO</div>
+                    </div>
+                    <div class="stat-box">
+                        <div id="fpsCounter" class="stat-value">60</div>
+                        <div class="stat-label">FPS ATUAIS</div>
+                    </div>
+                    <div class="stat-box">
+                        <div id="timerValue" class="stat-value">0.0s</div>
+                        <div class="stat-label">TEMPO DE EXECUÇÃO</div>
+                    </div>
+                    <div class="stat-box">
+                        <div id="generationRate" class="stat-value">0/s</div>
+                        <div class="stat-label">TÁXIMA ATUAL</div>
+                    </div>
+                    <div class="stat-box">
+                        <div id="nextMultiplier" class="stat-value">5s</div>
+                        <div class="stat-label">PRÓXIMA MULTIPLICAÇÃO</div>
+                    </div>
+                </div>
+                
+                <div class="generation-info">
+                    <div class="info-item">
+                        <strong>FASE ATUAL:</strong> <span id="currentPhase">1</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>BLOCO POR TICK:</strong> <span id="currentBlockPerTick">10</span>
+                    </div>
+                    <div class="info-item">
+                        <strong>ESTIMATIVA TRAVAMENTO:</strong> <span id="crashEstimation">Fase 8+</span>
+                    </div>
+                </div>
+                
+                <div class="warning">
+                    <i class="fas fa-radiation"></i>
+                    <div>
+                        <strong>⚠️ ALERTA MÁXIMO DE PERIGO ⚠️</strong><br>
+                        Este teste NÃO TEM LIMITES! A cada 5 segundos, a produção dobra INFINITAMENTE.
+                        Seu navegador VAI TRAVAR em poucos minutos. Use apenas em máquinas de teste!
+                    </div>
+                </div>
+                
+                <div class="crash-prediction">
+                    <i class="fas fa-exclamation-triangle"></i> 
+                    <strong>PREVISÃO DE COLAPSO:</strong> 
+                    <span id="crashPrediction">Seu navegador deve travar na Fase 8 (2,560 blocos/50ms)</span>
+                </div>
+                
+                <div class="log-container" id="logContainer">
+                    <div class="log-entry">Sistema inicializado. Aguardando início do apocalipse...</div>
+                </div>
+            </div>
+            
+            <div class="scene-container">
+                <div id="scene"></div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>TESTADOR DE LAG INFINITO &copy; 2023 | MULTIPLICAÇÃO EXPONENCIAL SEM LIMITES - PRODUÇÃO DOBRA A CADA 5s PARA SEMPRE!</p>
+            <p style="margin-top: 5px; font-size: 0.8rem;">
+                <i class="fas fa-calculator"></i> Progressão: 10 → 20 → 40 → 80 → 160 → 320 → 640 → 1,280 → 2,560 → 5,120 → 10,240 → ∞
+            </p>
+        </footer>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Variáveis globais
+        let scene, camera, renderer;
+        let blocks = [];
+        let generationInterval = null;
+        let multiplierInterval = null;
+        let timerInterval = null;
+        let blockCount = 0;
+        let totalGenerated = 0;
+        let startTime = 0;
+        let isRunning = false;
+        let fps = 60;
+        let frameCount = 0;
+        let lastFpsUpdate = performance.now();
+        let multiplier = 1;
+        let blocksPerTick = 10;
+        let blocksPerSecond = 200;
+        let crashEstimation = "Fase 8+";
+        let logEntries = [];
+        let nextMultiplierTime = 0;
+        
+        // Elementos do DOM
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const blockCountElement = document.getElementById('blockCount');
+        const totalGeneratedElement = document.getElementById('totalGenerated');
+        const fpsCounterElement = document.getElementById('fpsCounter');
+        const timerValueElement = document.getElementById('timerValue');
+        const sceneContainer = document.getElementById('scene');
+        const multiplierValue = document.getElementById('multiplierValue');
+        const blocksPerTickElement = document.getElementById('blocksPerTick');
+        const blocksPerSecondElement = document.getElementById('blocksPerSecond');
+        const generationRateElement = document.getElementById('generationRate');
+        const apocalypseIndicator = document.getElementById('apocalypseIndicator');
+        const apocalypseMultiplier = document.getElementById('apocalypseMultiplier');
+        const currentPhase = document.getElementById('currentPhase');
+        const currentBlockPerTick = document.getElementById('currentBlockPerTick');
+        const crashEstimationElement = document.getElementById('crashEstimation');
+        const crashPrediction = document.getElementById('crashPrediction');
+        const nextMultiplierElement = document.getElementById('nextMultiplier');
+        const logContainer = document.getElementById('logContainer');
+        
+        // Inicializar a cena Three.js
+        function initScene() {
+            // Criar cena
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x000011);
+            
+            // Criar câmera
+            camera = new THREE.PerspectiveCamera(75, sceneContainer.clientWidth / sceneContainer.clientHeight, 0.1, 100000);
+            camera.position.z = 100;
+            camera.position.y = 50;
+            
+            // Criar renderizador
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(sceneContainer.clientWidth, sceneContainer.clientHeight);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            
+            // Adicionar renderizador ao DOM
+            sceneContainer.appendChild(renderer.domElement);
+            
+            // Adicionar luzes intensas
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+            directionalLight.position.set(100, 200, 100);
+            directionalLight.castShadow = true;
+            scene.add(directionalLight);
+            
+            // Adicionar luzes coloridas dinâmicas
+            const redLight = new THREE.PointLight(0xff0000, 2, 1000);
+            redLight.position.set(100, 50, 0);
+            scene.add(redLight);
+            
+            const blueLight = new THREE.PointLight(0x0000ff, 2, 1000);
+            blueLight.position.set(-100, 50, 0);
+            scene.add(blueLight);
+            
+            const greenLight = new THREE.PointLight(0x00ff00, 2, 1000);
+            greenLight.position.set(0, 50, 100);
+            scene.add(greenLight);
+            
+            // Adicionar grade gigante
+            const gridHelper = new THREE.GridHelper(1000, 100, 0x888888, 0x444444);
+            scene.add(gridHelper);
+            
+            // Adicionar controles de órbita
+            try {
+                const OrbitControls = THREE.OrbitControls;
+                if (OrbitControls) {
+                    const controls = new OrbitControls(camera, renderer.domElement);
+                    controls.enableDamping = true;
+                    controls.dampingFactor = 0.05;
+                    controls.maxDistance = 1000;
+                    controls.minDistance = 10;
+                }
+            } catch (e) {
+                addLog("Controles de órbita não disponíveis");
+            }
+            
+            // Lidar com redimensionamento da janela
+            window.addEventListener('resize', onWindowResize);
+            
+            // Iniciar animação
+            animate();
+            
+            addLog("Cena 3D inicializada com sucesso");
+        }
+        
+        // Redimensionar a cena quando a janela for redimensionada
+        function onWindowResize() {
+            camera.aspect = sceneContainer.clientWidth / sceneContainer.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(sceneContainer.clientWidth, sceneContainer.clientHeight);
+        }
+        
+        // Adicionar entrada ao log
+        function addLog(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `<div class="log-entry">[${timestamp}] ${message}</div>`;
+            logEntries.push(logEntry);
+            
+            // Manter apenas as últimas 20 entradas
+            if (logEntries.length > 20) {
+                logEntries.shift();
+            }
+            
+            // Atualizar container
+            logContainer.innerHTML = logEntries.join('');
+            logContainer.scrollTop = logContainer.scrollHeight;
+        }
+        
+        // Criar um bloco 3D
+        function createBlock() {
+            // Criar geometria do bloco (tamanho diminui com mais blocos)
+            const baseSize = 0.5;
+            const sizeMultiplier = Math.max(0.1, 1 - (blockCount / 10000));
+            const size = baseSize * sizeMultiplier + Math.random() * 0.5;
+            
+            const geometry = new THREE.BoxGeometry(size, size, size);
+            
+            // Cor baseada no multiplicador
+            const hue = (multiplier * 30) % 360;
+            const color = new THREE.Color(`hsl(${hue}, 100%, 50%)`);
+            
+            const material = new THREE.MeshPhongMaterial({ 
+                color: color,
+                shininess: 30,
+                specular: 0x222222,
+                emissive: color,
+                emissiveIntensity: 0.2
+            });
+            
+            // Criar malha
+            const block = new THREE.Mesh(geometry, material);
+            block.castShadow = true;
+            block.receiveShadow = true;
+            
+            // Posicionar em esfera gigante (para acomodar infinitos blocos)
+            const radius = 50 + (multiplier * 5);
+            const phi = Math.random() * Math.PI * 2;
+            const theta = Math.random() * Math.PI;
+            
+            block.position.x = radius * Math.sin(theta) * Math.cos(phi);
+            block.position.y = radius * Math.sin(theta) * Math.sin(phi);
+            block.position.z = radius * Math.cos(theta);
+            
+            // Rotação aleatória
+            block.rotation.x = Math.random() * Math.PI;
+            block.rotation.y = Math.random() * Math.PI;
+            block.rotation.z = Math.random() * Math.PI;
+            
+            // Adicionar à cena
+            scene.add(block);
+            
+            // Armazenar referência
+            blocks.push({
+                mesh: block,
+                rotationSpeed: {
+                    x: (Math.random() - 0.5) * 0.1 * Math.min(multiplier, 10),
+                    y: (Math.random() - 0.5) * 0.1 * Math.min(multiplier, 10),
+                    z: (Math.random() - 0.5) * 0.1 * Math.min(multiplier, 10)
+                },
+                floatSpeed: Math.random() * 0.05 * Math.min(multiplier, 10),
+                floatDirection: Math.random() * Math.PI * 2,
+                creationTime: Date.now()
+            });
+            
+            // Atualizar contadores
+            blockCount++;
+            totalGenerated++;
+            
+            updateBlockCountDisplay();
+            
+            // Mostrar apocalipse se multiplicador muito alto
+            if (multiplier >= 15 && !apocalypseIndicator.style.display || apocalypseIndicator.style.display === 'none') {
+                showApocalypse();
+            }
+            
+            // Log periódico
+            if (totalGenerated % 1000 === 0) {
+                addLog(`${totalGenerated.toLocaleString()} blocos gerados (Multiplicador: ${multiplier}x)`);
+            }
+        }
+        
+        // Gerar blocos baseado no multiplicador atual
+        function generateBlocks() {
+            const startGenerationTime = Date.now();
+            let generated = 0;
+            
+            // Gerar blocos em lotes para não travar o processo principal
+            const batchSize = Math.min(blocksPerTick, 1000); // Limite por segurança
+            
+            for (let i = 0; i < batchSize; i++) {
+                createBlock();
+                generated++;
+                
+                // Pausar brevemente a cada 100 blocos para não congelar a UI
+                if (i % 100 === 0 && i > 0) {
+                    const elapsed = Date.now() - startGenerationTime;
+                    if (elapsed > 16) { // Mais de um frame (60fps)
+                        break; // Parar este tick para manter responsividade
+                    }
+                }
+            }
+            
+            // Atualizar taxa de geração
+            updateGenerationRate();
+            
+            // Atualizar estimativa de travamento
+            updateCrashEstimation();
+        }
+        
+        // Aumentar o multiplicador infinitamente
+        function increaseMultiplier() {
+            multiplier++;
+            
+            // Atualizar valores
+            blocksPerTick = 10 * Math.pow(2, multiplier - 1);
+            blocksPerSecond = blocksPerTick * 20; // 20 ticks por segundo (50ms cada)
+            
+            // Atualizar displays
+            multiplierValue.textContent = multiplier + "x";
+            blocksPerTickElement.textContent = blocksPerTick.toLocaleString();
+            blocksPerSecondElement.textContent = blocksPerSecond.toLocaleString();
+            currentPhase.textContent = multiplier;
+            currentBlockPerTick.textContent = blocksPerTick.toLocaleString();
+            apocalypseMultiplier.textContent = multiplier;
+            
+            // Efeito visual dramático
+            multiplierValue.style.transform = 'scale(1.5)';
+            multiplierValue.style.color = getMultiplierColor(multiplier);
+            
+            setTimeout(() => {
+                multiplierValue.style.transform = 'scale(1)';
+            }, 300);
+            
+            // Som de alerta (se possível)
+            playMultiplierSound();
+            
+            // Log
+            addLog(`MULTIPLICADOR AUMENTADO: ${multiplier}x (${blocksPerTick.toLocaleString()} blocos/50ms)`);
+            
+            // Atualizar tempo para próxima multiplicação
+            updateNextMultiplierTime();
+        }
+        
+        // Obter cor baseada no multiplicador
+        function getMultiplierColor(multiplier) {
+            if (multiplier < 5) return '#ff9900';
+            if (multiplier < 10) return '#ff5500';
+            if (multiplier < 15) return '#ff0000';
+            if (multiplier < 20) return '#ff00ff';
+            return '#ffffff';
+        }
+        
+        // Tocar som de multiplicador
+        function playMultiplierSound() {
+            try {
+                const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Frequência aumenta com o multiplicador
+                oscillator.frequency.value = 220 + (multiplier * 50);
+                gainNode.gain.value = Math.min(0.3, 0.05 * multiplier);
+                
+                oscillator.start();
+                oscillator.stop(audioContext.currentTime + 0.2);
+            } catch (e) {
+                // Ignorar erros de áudio
+            }
+        }
+        
+        // Mostrar tela de apocalipse
+        function showApocalypse() {
+            apocalypseIndicator.style.display = 'flex';
+            addLog("💀 COLAPSO IMINENTE! Multiplicador crítico alcançado!");
+            
+            // Efeito de tremor na página
+            document.body.style.animation = 'shake 0.5s infinite';
+        }
+        
+        // Atualizar a exibição do contador de blocos
+        function updateBlockCountDisplay() {
+            blockCountElement.textContent = blockCount.toLocaleString();
+            totalGeneratedElement.textContent = totalGenerated.toLocaleString();
+            
+            // Atualizar botão de limpar
+            if (blockCount % 500 === 0) {
+                updateClearButtonText();
+            }
+        }
+        
+        // Atualizar tempo para próxima multiplicação
+        function updateNextMultiplierTime() {
+            const now = Date.now();
+            const timeUntilNext = Math.max(0, nextMultiplierTime - now);
+            nextMultiplierElement.textContent = (timeUntilNext / 1000).toFixed(1) + 's';
+        }
+        
+        // Atualizar taxa de geração
+        function updateGenerationRate() {
+            const now = Date.now();
+            const elapsedSeconds = (now - startTime) / 1000;
+            
+            if (elapsedSeconds > 1) {
+                const currentRate = Math.round(totalGenerated / elapsedSeconds);
+                generationRateElement.textContent = currentRate.toLocaleString() + '/s';
+            }
+        }
+        
+        // Atualizar estimativa de travamento
+        function updateCrashEstimation() {
+            let estimation = "";
+            if (multiplier < 5) {
+                estimation = "Estável (por enquanto)";
+            } else if (multiplier < 8) {
+                estimation = "Fase " + multiplier + " - Começando a travar";
+            } else if (multiplier < 12) {
+                estimation = "Fase " + multiplier + " - Travamento eminente";
+            } else if (multiplier < 15) {
+                estimation = "Fase " + multiplier + " - COLAPSO PRÓXIMO";
+            } else {
+                estimation = "Fase " + multiplier + " - APOCALIPSE";
+            }
+            
+            crashEstimationElement.textContent = estimation;
+            crashPrediction.textContent = `Multiplicador atual: ${multiplier}x (${blocksPerTick.toLocaleString()} blocos/50ms)`;
+        }
+        
+        // Atualizar o texto do botão de limpar
+        function updateClearButtonText() {
+            clearBtn.innerHTML = `<i class="fas fa-trash-alt"></i> LIMPAR TUDO (${blockCount.toLocaleString()})`;
+        }
+        
+        // Iniciar a multiplicação infinita
+        function startInfiniteLag() {
+            if (isRunning) return;
+            
+            isRunning = true;
+            startTime = Date.now();
+            nextMultiplierTime = startTime + 5000; // Primeira multiplicação em 5 segundos
+            
+            // Resetar valores
+            multiplier = 1;
+            blocksPerTick = 10;
+            blocksPerSecond = 200;
+            
+            // Atualizar displays
+            multiplierValue.textContent = "1x";
+            blocksPerTickElement.textContent = "10";
+            blocksPerSecondElement.textContent = "200";
+            currentPhase.textContent = "1";
+            currentBlockPerTick.textContent = "10";
+            multiplierValue.style.color = getMultiplierColor(1);
+            
+            // Iniciar intervalos
+            generationInterval = setInterval(generateBlocks, 50); // 50ms
+            multiplierInterval = setInterval(increaseMultiplier, 5000); // 5 segundos
+            timerInterval = setInterval(updateTimer, 100);
+            
+            // Atualizar tempo da próxima multiplicação periodicamente
+            setInterval(updateNextMultiplierTime, 100);
+            
+            // Atualizar interface
+            startBtn.disabled = true;
+            stopBtn.disabled = false;
+            
+            // Esconder apocalipse se estava visível
+            apocalypseIndicator.style.display = 'none';
+            document.body.style.animation = '';
+            
+            addLog("⚡ INICIANDO MULTIPLICAÇÃO INFINITA ⚡");
+            addLog("Fase 1: 10 blocos a cada 50ms (200/s)");
+            addLog("Multiplicação automática a cada 5 segundos");
+            addLog("SEM LIMITES - PRODUÇÃO DOBRARÁ INFINITAMENTE");
+        }
+        
+        // Tentar parar a geração (pode não responder se travando)
+        function stopInfiniteLag() {
+            if (!isRunning) return;
+            
+            addLog("Tentando parar a multiplicação infinita...");
+            
+            isRunning = false;
+            
+            // Tentar parar intervalos (pode falhar se o navegador estiver travando)
+            try {
+                if (generationInterval) {
+                    clearInterval(generationInterval);
+                    generationInterval = null;
+                }
+                
+                if (multiplierInterval) {
+                    clearInterval(multiplierInterval);
+                    multiplierInterval = null;
+                }
+                
+                if (timerInterval) {
+                    clearInterval(timerInterval);
+                    timerInterval = null;
+                }
+            } catch (e) {
+                addLog("Erro ao parar intervalos: " + e.message);
+            }
+            
+            // Atualizar interface
+            startBtn.disabled = false;
+            stopBtn.disabled = true;
+            
+            // Esconder apocalipse
+            apocalypseIndicator.style.display = 'none';
+            document.body.style.animation = '';
+            
+            addLog(`Multiplicação parada. Fase final: ${multiplier}x`);
+            addLog(`Total de blocos gerados: ${totalGenerated.toLocaleString()}`);
+            addLog(`Blocos na cena: ${blockCount.toLocaleString()}`);
+        }
+        
+        // Limpar todos os blocos (operação pesada)
+        function clearAllBlocks() {
+            if (blockCount === 0) return;
+            
+            // Confirmar se há muitos blocos
+            if (blockCount > 1000) {
+                if (!confirm(`VOCÊ TEM CERTEZA? Isso removerá ${blockCount.toLocaleString()} blocos 3D.\nEsta operação pode travar o navegador temporariamente.`)) {
+                    return;
+                }
+            }
+            
+            addLog(`Iniciando limpeza de ${blockCount.toLocaleString()} blocos...`);
+            const startClearTime = Date.now();
+            
+            // Operação em lotes para não travar completamente
+            let cleared = 0;
+            const clearBatch = () => {
+                const batchSize = Math.min(100, blocks.length);
+                
+                for (let i = 0; i < batchSize && blocks.length > 0; i++) {
+                    const block = blocks.pop();
+                    scene.remove(block.mesh);
+                    
+                    // Liberar memória
+                    if (block.mesh.geometry) block.mesh.geometry.dispose();
+                    if (block.mesh.material) {
+                        if (Array.isArray(block.mesh.material)) {
+                            block.mesh.material.forEach(material => material.dispose());
+                        } else {
+                            block.mesh.material.dispose();
+                        }
+                    }
+                    
+                    cleared++;
+                    blockCount--;
+                }
+                
+                updateBlockCountDisplay();
+                
+                // Continuar se ainda houver blocos
+                if (blocks.length > 0) {
+                    setTimeout(clearBatch, 10); // Pequena pausa entre lotes
+                } else {
+                    const clearTime = Date.now() - startClearTime;
+                    addLog(`Limpeza concluída em ${clearTime}ms. ${cleared.toLocaleString()} blocos removidos.`);
+                    
+                    // Forçar coleta de lixo se disponível
+                    if (window.gc) {
+                        window.gc();
+                        addLog("Coleta de lixo forçada executada");
+                    }
+                }
+            };
+            
+            clearBatch();
+        }
+        
+        // Atualizar timer
+        function updateTimer() {
+            const elapsed = (Date.now() - startTime) / 1000;
+            timerValueElement.textContent = elapsed.toFixed(1) + "s";
+        }
+        
+        // Atualizar FPS
+        function updateFPS() {
+            const currentTime = performance.now();
+            frameCount++;
+            
+            if (currentTime - lastFpsUpdate >= 1000) {
+                fps = Math.round((frameCount * 1000) / (currentTime - lastFpsUpdate));
+                fpsCounterElement.textContent = fps;
+                
+                // Cor baseada no FPS
+                if (fps < 5) {
+                    fpsCounterElement.style.color = "#ff0000";
+                } else if (fps < 15) {
+                    fpsCounterElement.style.color = "#ff5500";
+                } else if (fps < 30) {
+                    fpsCounterElement.style.color = "#ffaa00";
+                } else {
+                    fpsCounterElement.style.color = "#00ffaa";
+                }
+                
+                frameCount = 0;
+                lastFpsUpdate = currentTime;
+            }
+        }
+        
+        // Animação principal (otimizada para muitas instâncias)
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            // Atualizar FPS
+            updateFPS();
+            
+            // Animar blocos (com otimização progressiva)
+            if (blocks.length > 0) {
+                // Reduzir qualidade conforme quantidade aumenta
+                let skipFactor = 1;
+                if (blocks.length > 10000) skipFactor = 10;
+                else if (blocks.length > 5000) skipFactor = 5;
+                else if (blocks.length > 2000) skipFactor = 3;
+                else if (blocks.length > 1000) skipFactor = 2;
+                
+                for (let i = 0; i < blocks.length; i += skipFactor) {
+                    const block = blocks[i];
+                    
+                    // Rotação
+                    block.mesh.rotation.x += block.rotationSpeed.x;
+                    block.mesh.rotation.y += block.rotationSpeed.y;
+                    block.mesh.rotation.z += block.rotationSpeed.z;
+                    
+                    // Flutuação
+                    block.floatDirection += 0.02;
+                    const floatOffset = Math.sin(block.floatDirection) * 0.1 * block.floatSpeed;
+                    block.mesh.position.x += floatOffset * 0.1;
+                    block.mesh.position.y += floatOffset * 0.2;
+                    block.mesh.position.z += floatOffset * 0.1;
+                    
+                    // Expansão lenta
+                    const age = (Date.now() - block.creationTime) / 1000;
+                    if (age > 10) {
+                        const expansion = 0.001 * Math.min(multiplier, 10);
+                        block.mesh.position.x *= 1 + expansion;
+                        block.mesh.position.y *= 1 + expansion;
+                        block.mesh.position.z *= 1 + expansion;
+                    }
+                }
+            }
+            
+            // Renderizar
+            renderer.render(scene, camera);
+        }
+        
+        // Configurar event listeners
+        startBtn.addEventListener('click', startInfiniteLag);
+        stopBtn.addEventListener('click', stopInfiniteLag);
+        clearBtn.addEventListener('click', clearAllBlocks);
+        
+        // Desabilitar botão de parar inicialmente
+        stopBtn.disabled = true;
+        
+        // Inicializar cena
+        window.addEventListener('load', initScene);
+        
+        // Atalhos de teclado
+        document.addEventListener('keydown', (e) => {
+            // Espaço para iniciar/parar
+            if (e.code === 'Space') {
+                e.preventDefault();
+                if (isRunning) {
+                    stopInfiniteLag();
+                } else {
+                    startInfiniteLag();
+                }
+            }
+            
+            // Escape para limpar
+            if (e.code === 'Escape') {
+                clearAllBlocks();
+            }
+            
+            // Ctrl+Shift+I para aumentar multiplicador manualmente
+            if (e.code === 'KeyI' && e.ctrlKey && e.shiftKey && isRunning) {
+                e.preventDefault();
+                increaseMultiplier();
+            }
+        });
+        
+        // Informações iniciais
+        console.log("=== TESTADOR DE LAG INFINITO ===");
+        console.log("MULTIPLICAÇÃO EXPONENCIAL SEM LIMITES");
+        console.log("A cada 5 segundos, a produção DOBRA INFINITAMENTE");
+        console.log("Fase 1: 10 blocos/50ms (200/s)");
+        console.log("Fase 2: 20 blocos/50ms (400/s)");
+        console.log("Fase 5: 160 blocos/50ms (3,200/s)");
+        console.log("Fase 10: 5,120 blocos/50ms (102,400/s)");
+        console.log("Fase 15: 163,840 blocos/50ms (3,276,800/s)");
+        console.log("Fase 20: 5,242,880 blocos/50ms (104,857,600/s)");
+        console.log("SEU NAVEGADOR VAI TRAVAR - É APENAS UMA QUESTÃO DE TEMPO!");
+        console.log("=================================");
+    </script>
+</body>
+</html>
