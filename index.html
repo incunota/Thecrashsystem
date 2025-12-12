@@ -204,12 +204,6 @@
             display: flex;
             align-items: center;
             gap: 20px;
-            animation: warningFlash 1s infinite;
-        }
-        
-        @keyframes warningFlash {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.7; }
         }
         
         .warning i {
@@ -237,27 +231,25 @@
             text-align: center;
         }
         
-        .apocalypse-indicator {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 0, 0, 0.7);
-            z-index: 9999;
+        .performance-warning {
+            background: rgba(255, 50, 50, 0.4);
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
             display: none;
-            justify-content: center;
             align-items: center;
-            flex-direction: column;
-            font-size: 4rem;
-            text-align: center;
-            animation: apocalypsePulse 0.5s infinite;
+            gap: 15px;
+            border-left: 5px solid #ff3232;
         }
         
-        @keyframes apocalypsePulse {
-            0% { background: rgba(255, 0, 0, 0.7); }
-            50% { background: rgba(255, 0, 0, 0.9); }
-            100% { background: rgba(255, 0, 0, 0.7); }
+        .performance-warning.show {
+            display: flex;
+            animation: fadeIn 0.5s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
         
         footer {
@@ -316,16 +308,14 @@
             .multiplier-value {
                 font-size: 2.5rem;
             }
+            
+            .generation-info {
+                flex-direction: column;
+            }
         }
     </style>
 </head>
 <body>
-    <div id="apocalypseIndicator" class="apocalypse-indicator">
-        <div style="font-size: 5rem; margin-bottom: 20px;">💀☠️💀</div>
-        <div>COLAPSO TOTAL DO NAVEGADOR</div>
-        <div style="font-size: 2rem; margin-top: 20px;">Multiplicador: <span id="apocalypseMultiplier">∞</span>x</div>
-    </div>
-    
     <div class="container">
         <header>
             <h1><i class="fas fa-infinity"></i> TESTADOR DE LAG INFINITO</h1>
@@ -336,10 +326,10 @@
             <div class="controls">
                 <div class="button-container">
                     <button id="startBtn" class="btn btn-start">
-                        <i class="fas fa-skull-crossbones"></i> INICIAR APOCALIPSE
+                        <i class="fas fa-play"></i> INICIAR MULTIPLICAÇÃO INFINITA
                     </button>
                     <button id="stopBtn" class="btn btn-stop">
-                        <i class="fas fa-hand-paper"></i> TENTAR PARAR
+                        <i class="fas fa-stop"></i> PARAR GERAÇÃO
                     </button>
                     <button id="clearBtn" class="btn btn-clear">
                         <i class="fas fa-trash-alt"></i> LIMPAR TUDO (0)
@@ -347,12 +337,19 @@
                 </div>
                 
                 <div class="multiplier-container">
-                    <div class="stat-label">MULTIPLICADOR ATUAL (INFINITO)</div>
+                    <div class="stat-label">MULTIPLICADOR ATUAL</div>
                     <div id="multiplierValue" class="multiplier-value">1x</div>
                     <div class="phase-display">
                         Gerando <span id="blocksPerTick">10</span> blocos a cada 50ms
                         <br>
                         (<span id="blocksPerSecond">200</span> blocos/segundo)
+                    </div>
+                </div>
+                
+                <div class="performance-warning" id="performanceWarning">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>
+                        <strong>PERFORMANCE CRÍTICA!</strong> FPS muito baixo. Considere parar ou limpar blocos.
                     </div>
                 </div>
                 
@@ -375,10 +372,10 @@
                     </div>
                     <div class="stat-box">
                         <div id="generationRate" class="stat-value">0/s</div>
-                        <div class="stat-label">TÁXIMA ATUAL</div>
+                        <div class="stat-label">TAXA ATUAL</div>
                     </div>
                     <div class="stat-box">
-                        <div id="nextMultiplier" class="stat-value">5s</div>
+                        <div id="nextMultiplier" class="stat-value">5.0s</div>
                         <div class="stat-label">PRÓXIMA MULTIPLICAÇÃO</div>
                     </div>
                 </div>
@@ -398,20 +395,20 @@
                 <div class="warning">
                     <i class="fas fa-radiation"></i>
                     <div>
-                        <strong>⚠️ ALERTA MÁXIMO DE PERIGO ⚠️</strong><br>
+                        <strong>⚠️ ALERTA DE PERIGO ⚠️</strong><br>
                         Este teste NÃO TEM LIMITES! A cada 5 segundos, a produção dobra INFINITAMENTE.
-                        Seu navegador VAI TRAVAR em poucos minutos. Use apenas em máquinas de teste!
+                        Seu navegador pode travar com multiplicadores altos. Use com cautela!
                     </div>
                 </div>
                 
                 <div class="crash-prediction">
                     <i class="fas fa-exclamation-triangle"></i> 
-                    <strong>PREVISÃO DE COLAPSO:</strong> 
-                    <span id="crashPrediction">Seu navegador deve travar na Fase 8 (2,560 blocos/50ms)</span>
+                    <strong>INFORMAÇÃO:</strong> 
+                    <span id="crashPrediction">Multiplicador: 1x (10 blocos/50ms)</span>
                 </div>
                 
                 <div class="log-container" id="logContainer">
-                    <div class="log-entry">Sistema inicializado. Aguardando início do apocalipse...</div>
+                    <div class="log-entry">Sistema inicializado. Aguardando início...</div>
                 </div>
             </div>
             
@@ -421,9 +418,9 @@
         </main>
         
         <footer>
-            <p>TESTADOR DE LAG INFINITO &copy; 2023 | MULTIPLICAÇÃO EXPONENCIAL SEM LIMITES - PRODUÇÃO DOBRA A CADA 5s PARA SEMPRE!</p>
+            <p>TESTADOR DE LAG INFINITO &copy; 2023 | MULTIPLICAÇÃO EXPONENCIAL SEM LIMITES - PRODUÇÃO DOBRA A CADA 5s</p>
             <p style="margin-top: 5px; font-size: 0.8rem;">
-                <i class="fas fa-calculator"></i> Progressão: 10 → 20 → 40 → 80 → 160 → 320 → 640 → 1,280 → 2,560 → 5,120 → 10,240 → ∞
+                <i class="fas fa-calculator"></i> Progressão: 10 → 20 → 40 → 80 → 160 → 320 → 640 → 1,280 → 2,560 → 5,120 → ∞
             </p>
         </footer>
     </div>
@@ -446,7 +443,6 @@
         let multiplier = 1;
         let blocksPerTick = 10;
         let blocksPerSecond = 200;
-        let crashEstimation = "Fase 8+";
         let logEntries = [];
         let nextMultiplierTime = 0;
         
@@ -463,14 +459,13 @@
         const blocksPerTickElement = document.getElementById('blocksPerTick');
         const blocksPerSecondElement = document.getElementById('blocksPerSecond');
         const generationRateElement = document.getElementById('generationRate');
-        const apocalypseIndicator = document.getElementById('apocalypseIndicator');
-        const apocalypseMultiplier = document.getElementById('apocalypseMultiplier');
         const currentPhase = document.getElementById('currentPhase');
         const currentBlockPerTick = document.getElementById('currentBlockPerTick');
         const crashEstimationElement = document.getElementById('crashEstimation');
         const crashPrediction = document.getElementById('crashPrediction');
         const nextMultiplierElement = document.getElementById('nextMultiplier');
         const logContainer = document.getElementById('logContainer');
+        const performanceWarning = document.getElementById('performanceWarning');
         
         // Inicializar a cena Three.js
         function initScene() {
@@ -492,7 +487,7 @@
             // Adicionar renderizador ao DOM
             sceneContainer.appendChild(renderer.domElement);
             
-            // Adicionar luzes intensas
+            // Adicionar luzes
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.3);
             scene.add(ambientLight);
             
@@ -501,7 +496,7 @@
             directionalLight.castShadow = true;
             scene.add(directionalLight);
             
-            // Adicionar luzes coloridas dinâmicas
+            // Adicionar luzes coloridas
             const redLight = new THREE.PointLight(0xff0000, 2, 1000);
             redLight.position.set(100, 50, 0);
             scene.add(redLight);
@@ -514,7 +509,7 @@
             greenLight.position.set(0, 50, 100);
             scene.add(greenLight);
             
-            // Adicionar grade gigante
+            // Adicionar grade
             const gridHelper = new THREE.GridHelper(1000, 100, 0x888888, 0x444444);
             scene.add(gridHelper);
             
@@ -566,7 +561,7 @@
         
         // Criar um bloco 3D
         function createBlock() {
-            // Criar geometria do bloco (tamanho diminui com mais blocos)
+            // Criar geometria do bloco
             const baseSize = 0.5;
             const sizeMultiplier = Math.max(0.1, 1 - (blockCount / 10000));
             const size = baseSize * sizeMultiplier + Math.random() * 0.5;
@@ -590,7 +585,7 @@
             block.castShadow = true;
             block.receiveShadow = true;
             
-            // Posicionar em esfera gigante (para acomodar infinitos blocos)
+            // Posicionar em esfera
             const radius = 50 + (multiplier * 5);
             const phi = Math.random() * Math.PI * 2;
             const theta = Math.random() * Math.PI;
@@ -626,11 +621,6 @@
             
             updateBlockCountDisplay();
             
-            // Mostrar apocalipse se multiplicador muito alto
-            if (multiplier >= 15 && !apocalypseIndicator.style.display || apocalypseIndicator.style.display === 'none') {
-                showApocalypse();
-            }
-            
             // Log periódico
             if (totalGenerated % 1000 === 0) {
                 addLog(`${totalGenerated.toLocaleString()} blocos gerados (Multiplicador: ${multiplier}x)`);
@@ -643,7 +633,7 @@
             let generated = 0;
             
             // Gerar blocos em lotes para não travar o processo principal
-            const batchSize = Math.min(blocksPerTick, 1000); // Limite por segurança
+            const batchSize = Math.min(blocksPerTick, 1000);
             
             for (let i = 0; i < batchSize; i++) {
                 createBlock();
@@ -652,8 +642,8 @@
                 // Pausar brevemente a cada 100 blocos para não congelar a UI
                 if (i % 100 === 0 && i > 0) {
                     const elapsed = Date.now() - startGenerationTime;
-                    if (elapsed > 16) { // Mais de um frame (60fps)
-                        break; // Parar este tick para manter responsividade
+                    if (elapsed > 16) {
+                        break;
                     }
                 }
             }
@@ -661,8 +651,8 @@
             // Atualizar taxa de geração
             updateGenerationRate();
             
-            // Atualizar estimativa de travamento
-            updateCrashEstimation();
+            // Atualizar estimativa de performance
+            updatePerformanceEstimation();
         }
         
         // Aumentar o multiplicador infinitamente
@@ -671,7 +661,7 @@
             
             // Atualizar valores
             blocksPerTick = 10 * Math.pow(2, multiplier - 1);
-            blocksPerSecond = blocksPerTick * 20; // 20 ticks por segundo (50ms cada)
+            blocksPerSecond = blocksPerTick * 20;
             
             // Atualizar displays
             multiplierValue.textContent = multiplier + "x";
@@ -679,9 +669,8 @@
             blocksPerSecondElement.textContent = blocksPerSecond.toLocaleString();
             currentPhase.textContent = multiplier;
             currentBlockPerTick.textContent = blocksPerTick.toLocaleString();
-            apocalypseMultiplier.textContent = multiplier;
             
-            // Efeito visual dramático
+            // Efeito visual
             multiplierValue.style.transform = 'scale(1.5)';
             multiplierValue.style.color = getMultiplierColor(multiplier);
             
@@ -689,11 +678,11 @@
                 multiplierValue.style.transform = 'scale(1)';
             }, 300);
             
-            // Som de alerta (se possível)
+            // Som de alerta
             playMultiplierSound();
             
             // Log
-            addLog(`MULTIPLICADOR AUMENTADO: ${multiplier}x (${blocksPerTick.toLocaleString()} blocos/50ms)`);
+            addLog(`Multiplicador aumentado: ${multiplier}x (${blocksPerTick.toLocaleString()} blocos/50ms)`);
             
             // Atualizar tempo para próxima multiplicação
             updateNextMultiplierTime();
@@ -718,7 +707,6 @@
                 oscillator.connect(gainNode);
                 gainNode.connect(audioContext.destination);
                 
-                // Frequência aumenta com o multiplicador
                 oscillator.frequency.value = 220 + (multiplier * 50);
                 gainNode.gain.value = Math.min(0.3, 0.05 * multiplier);
                 
@@ -727,15 +715,6 @@
             } catch (e) {
                 // Ignorar erros de áudio
             }
-        }
-        
-        // Mostrar tela de apocalipse
-        function showApocalypse() {
-            apocalypseIndicator.style.display = 'flex';
-            addLog("💀 COLAPSO IMINENTE! Multiplicador crítico alcançado!");
-            
-            // Efeito de tremor na página
-            document.body.style.animation = 'shake 0.5s infinite';
         }
         
         // Atualizar a exibição do contador de blocos
@@ -767,28 +746,40 @@
             }
         }
         
-        // Atualizar estimativa de travamento
-        function updateCrashEstimation() {
+        // Atualizar estimativa de performance
+        function updatePerformanceEstimation() {
             let estimation = "";
             if (multiplier < 5) {
-                estimation = "Estável (por enquanto)";
+                estimation = "Performance estável";
             } else if (multiplier < 8) {
-                estimation = "Fase " + multiplier + " - Começando a travar";
+                estimation = "Performance moderada";
             } else if (multiplier < 12) {
-                estimation = "Fase " + multiplier + " - Travamento eminente";
-            } else if (multiplier < 15) {
-                estimation = "Fase " + multiplier + " - COLAPSO PRÓXIMO";
+                estimation = "Performance baixa";
             } else {
-                estimation = "Fase " + multiplier + " - APOCALIPSE";
+                estimation = "Performance crítica";
             }
             
             crashEstimationElement.textContent = estimation;
-            crashPrediction.textContent = `Multiplicador atual: ${multiplier}x (${blocksPerTick.toLocaleString()} blocos/50ms)`;
+            crashPrediction.textContent = `Multiplicador: ${multiplier}x (${blocksPerTick.toLocaleString()} blocos/50ms)`;
         }
         
         // Atualizar o texto do botão de limpar
         function updateClearButtonText() {
             clearBtn.innerHTML = `<i class="fas fa-trash-alt"></i> LIMPAR TUDO (${blockCount.toLocaleString()})`;
+        }
+        
+        // Mostrar aviso de performance
+        function showPerformanceWarning() {
+            if (!performanceWarning.classList.contains('show')) {
+                performanceWarning.classList.add('show');
+            }
+        }
+        
+        // Esconder aviso de performance
+        function hidePerformanceWarning() {
+            if (performanceWarning.classList.contains('show')) {
+                performanceWarning.classList.remove('show');
+            }
         }
         
         // Iniciar a multiplicação infinita
@@ -797,7 +788,7 @@
             
             isRunning = true;
             startTime = Date.now();
-            nextMultiplierTime = startTime + 5000; // Primeira multiplicação em 5 segundos
+            nextMultiplierTime = startTime + 5000;
             
             // Resetar valores
             multiplier = 1;
@@ -813,8 +804,8 @@
             multiplierValue.style.color = getMultiplierColor(1);
             
             // Iniciar intervalos
-            generationInterval = setInterval(generateBlocks, 50); // 50ms
-            multiplierInterval = setInterval(increaseMultiplier, 5000); // 5 segundos
+            generationInterval = setInterval(generateBlocks, 50);
+            multiplierInterval = setInterval(increaseMultiplier, 5000);
             timerInterval = setInterval(updateTimer, 100);
             
             // Atualizar tempo da próxima multiplicação periodicamente
@@ -824,25 +815,23 @@
             startBtn.disabled = true;
             stopBtn.disabled = false;
             
-            // Esconder apocalipse se estava visível
-            apocalypseIndicator.style.display = 'none';
-            document.body.style.animation = '';
+            // Esconder aviso de performance
+            hidePerformanceWarning();
             
-            addLog("⚡ INICIANDO MULTIPLICAÇÃO INFINITA ⚡");
+            addLog("Iniciando multiplicação infinita");
             addLog("Fase 1: 10 blocos a cada 50ms (200/s)");
             addLog("Multiplicação automática a cada 5 segundos");
-            addLog("SEM LIMITES - PRODUÇÃO DOBRARÁ INFINITAMENTE");
         }
         
-        // Tentar parar a geração (pode não responder se travando)
+        // Parar a geração
         function stopInfiniteLag() {
             if (!isRunning) return;
             
-            addLog("Tentando parar a multiplicação infinita...");
+            addLog("Parando multiplicação infinita...");
             
             isRunning = false;
             
-            // Tentar parar intervalos (pode falhar se o navegador estiver travando)
+            // Parar intervalos
             try {
                 if (generationInterval) {
                     clearInterval(generationInterval);
@@ -866,22 +855,21 @@
             startBtn.disabled = false;
             stopBtn.disabled = true;
             
-            // Esconder apocalipse
-            apocalypseIndicator.style.display = 'none';
-            document.body.style.animation = '';
+            // Esconder aviso de performance
+            hidePerformanceWarning();
             
             addLog(`Multiplicação parada. Fase final: ${multiplier}x`);
             addLog(`Total de blocos gerados: ${totalGenerated.toLocaleString()}`);
             addLog(`Blocos na cena: ${blockCount.toLocaleString()}`);
         }
         
-        // Limpar todos os blocos (operação pesada)
+        // Limpar todos os blocos
         function clearAllBlocks() {
             if (blockCount === 0) return;
             
             // Confirmar se há muitos blocos
             if (blockCount > 1000) {
-                if (!confirm(`VOCÊ TEM CERTEZA? Isso removerá ${blockCount.toLocaleString()} blocos 3D.\nEsta operação pode travar o navegador temporariamente.`)) {
+                if (!confirm(`Isso removerá ${blockCount.toLocaleString()} blocos 3D. Continuar?`)) {
                     return;
                 }
             }
@@ -916,7 +904,7 @@
                 
                 // Continuar se ainda houver blocos
                 if (blocks.length > 0) {
-                    setTimeout(clearBatch, 10); // Pequena pausa entre lotes
+                    setTimeout(clearBatch, 10);
                 } else {
                     const clearTime = Date.now() - startClearTime;
                     addLog(`Limpeza concluída em ${clearTime}ms. ${cleared.toLocaleString()} blocos removidos.`);
@@ -924,7 +912,7 @@
                     // Forçar coleta de lixo se disponível
                     if (window.gc) {
                         window.gc();
-                        addLog("Coleta de lixo forçada executada");
+                        addLog("Coleta de lixo executada");
                     }
                 }
             };
@@ -950,12 +938,16 @@
                 // Cor baseada no FPS
                 if (fps < 5) {
                     fpsCounterElement.style.color = "#ff0000";
+                    showPerformanceWarning();
                 } else if (fps < 15) {
                     fpsCounterElement.style.color = "#ff5500";
+                    showPerformanceWarning();
                 } else if (fps < 30) {
                     fpsCounterElement.style.color = "#ffaa00";
+                    hidePerformanceWarning();
                 } else {
                     fpsCounterElement.style.color = "#00ffaa";
+                    hidePerformanceWarning();
                 }
                 
                 frameCount = 0;
@@ -963,16 +955,15 @@
             }
         }
         
-        // Animação principal (otimizada para muitas instâncias)
+        // Animação principal
         function animate() {
             requestAnimationFrame(animate);
             
             // Atualizar FPS
             updateFPS();
             
-            // Animar blocos (com otimização progressiva)
+            // Animar blocos (com otimização)
             if (blocks.length > 0) {
-                // Reduzir qualidade conforme quantidade aumenta
                 let skipFactor = 1;
                 if (blocks.length > 10000) skipFactor = 10;
                 else if (blocks.length > 5000) skipFactor = 5;
@@ -1048,13 +1039,6 @@
         console.log("=== TESTADOR DE LAG INFINITO ===");
         console.log("MULTIPLICAÇÃO EXPONENCIAL SEM LIMITES");
         console.log("A cada 5 segundos, a produção DOBRA INFINITAMENTE");
-        console.log("Fase 1: 10 blocos/50ms (200/s)");
-        console.log("Fase 2: 20 blocos/50ms (400/s)");
-        console.log("Fase 5: 160 blocos/50ms (3,200/s)");
-        console.log("Fase 10: 5,120 blocos/50ms (102,400/s)");
-        console.log("Fase 15: 163,840 blocos/50ms (3,276,800/s)");
-        console.log("Fase 20: 5,242,880 blocos/50ms (104,857,600/s)");
-        console.log("SEU NAVEGADOR VAI TRAVAR - É APENAS UMA QUESTÃO DE TEMPO!");
         console.log("=================================");
     </script>
 </body>
