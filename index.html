@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Testador de Lag Infinito - Multiplicação Sem Limites</title>
+    <title>Testador de Lag Quadrático - Elevação ao Quadrado</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * {
@@ -14,7 +14,7 @@
         }
         
         body {
-            background: linear-gradient(135deg, #000000, #0a0a2a, #1a0033);
+            background: linear-gradient(135deg, #000000, #1a0a2a, #2a1a3a);
             color: #fff;
             min-height: 100vh;
             overflow-x: hidden;
@@ -36,24 +36,18 @@
         h1 {
             font-size: 3rem;
             margin-bottom: 10px;
-            background: linear-gradient(to right, #ff0000, #ff5500, #ffaa00, #ffff00, #aaff00);
+            background: linear-gradient(to right, #ff3366, #ff0066, #cc00ff);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
-            text-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
-            animation: rainbow 3s infinite linear;
-        }
-        
-        @keyframes rainbow {
-            0% { filter: hue-rotate(0deg); }
-            100% { filter: hue-rotate(360deg); }
+            text-shadow: 0 0 20px rgba(255, 51, 102, 0.5);
         }
         
         .subtitle {
             font-size: 1.3rem;
             opacity: 0.9;
             margin-bottom: 20px;
-            color: #ff9900;
+            color: #ff66aa;
         }
         
         .controls {
@@ -63,7 +57,7 @@
             margin-bottom: 30px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 0, 0, 0.3);
+            border: 1px solid rgba(255, 51, 102, 0.3);
         }
         
         .button-container {
@@ -89,65 +83,67 @@
         }
         
         .btn-start {
-            background: linear-gradient(to right, #ff0000, #ff5500);
+            background: linear-gradient(to right, #ff3366, #cc00ff);
             color: white;
-            box-shadow: 0 0 20px rgba(255, 0, 0, 0.5);
+            box-shadow: 0 0 20px rgba(255, 51, 102, 0.5);
         }
         
         .btn-start:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(255, 0, 0, 0.7);
+            box-shadow: 0 10px 30px rgba(255, 51, 102, 0.7);
         }
         
         .btn-stop {
-            background: linear-gradient(to right, #0000ff, #0088ff);
+            background: linear-gradient(to right, #3366ff, #0066cc);
             color: white;
-            box-shadow: 0 0 20px rgba(0, 0, 255, 0.5);
+            box-shadow: 0 0 20px rgba(51, 102, 255, 0.5);
         }
         
         .btn-stop:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(0, 0, 255, 0.7);
+            box-shadow: 0 10px 30px rgba(51, 102, 255, 0.7);
         }
         
         .btn-clear {
-            background: linear-gradient(to right, #aa00ff, #ff00ff);
+            background: linear-gradient(to right, #00cc66, #00aa55);
             color: white;
-            box-shadow: 0 0 20px rgba(170, 0, 255, 0.5);
+            box-shadow: 0 0 20px rgba(0, 204, 102, 0.5);
         }
         
         .btn-clear:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 30px rgba(170, 0, 255, 0.7);
+            box-shadow: 0 10px 30px rgba(0, 204, 102, 0.7);
         }
         
-        .multiplier-container {
-            background: rgba(255, 0, 0, 0.2);
+        .quadratic-container {
+            background: rgba(255, 51, 102, 0.2);
             border-radius: 15px;
             padding: 20px;
             margin: 20px 0;
-            border: 2px solid rgba(255, 0, 0, 0.5);
+            border: 2px solid rgba(255, 51, 102, 0.5);
             text-align: center;
-            animation: pulse 1.5s infinite;
         }
         
-        @keyframes pulse {
-            0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.7); }
-            70% { box-shadow: 0 0 0 20px rgba(255, 0, 0, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
-        }
-        
-        .multiplier-value {
+        .quadratic-value {
             font-size: 4rem;
             font-weight: bold;
-            color: #ff0000;
-            text-shadow: 0 0 30px #ff0000;
+            color: #ff3366;
+            text-shadow: 0 0 30px #ff3366;
             margin: 10px 0;
         }
         
-        .phase-display {
+        .quadratic-display {
             font-size: 1.5rem;
-            color: #ffaa00;
+            color: #ff99cc;
+        }
+        
+        .power-info {
+            font-size: 1.2rem;
+            color: #ffcc00;
+            margin-top: 10px;
+            background: rgba(255, 204, 0, 0.1);
+            padding: 10px;
+            border-radius: 10px;
         }
         
         .stats {
@@ -168,8 +164,8 @@
         .stat-value {
             font-size: 2.8rem;
             font-weight: bold;
-            color: #00ffaa;
-            text-shadow: 0 0 15px rgba(0, 255, 170, 0.7);
+            color: #ff66aa;
+            text-shadow: 0 0 15px rgba(255, 102, 170, 0.7);
         }
         
         .stat-label {
@@ -185,7 +181,7 @@
             background: rgba(0, 0, 0, 0.8);
             border-radius: 15px;
             overflow: hidden;
-            border: 2px solid rgba(255, 0, 0, 0.3);
+            border: 2px solid rgba(255, 51, 102, 0.3);
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.7);
             margin-bottom: 30px;
         }
@@ -196,8 +192,8 @@
         }
         
         .warning {
-            background: rgba(255, 0, 0, 0.3);
-            border: 2px solid #ff0000;
+            background: rgba(255, 100, 0, 0.3);
+            border: 2px solid #ff6400;
             padding: 20px;
             border-radius: 10px;
             margin-top: 20px;
@@ -208,7 +204,7 @@
         
         .warning i {
             font-size: 2rem;
-            color: #ff0000;
+            color: #ff6400;
         }
         
         .generation-info {
@@ -226,7 +222,7 @@
             flex: 1;
             min-width: 200px;
             padding: 10px;
-            background: rgba(255, 100, 0, 0.2);
+            background: rgba(255, 51, 102, 0.2);
             border-radius: 8px;
             text-align: center;
         }
@@ -256,17 +252,31 @@
             text-align: center;
             padding: 20px;
             margin-top: 30px;
-            border-top: 1px solid rgba(255, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 51, 102, 0.3);
             font-size: 0.9rem;
             opacity: 0.8;
         }
         
-        .crash-prediction {
-            background: rgba(255, 0, 0, 0.4);
-            padding: 10px;
+        .progress-container {
+            background: rgba(0, 0, 0, 0.3);
             border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .progress-bar {
+            height: 20px;
+            background: rgba(255, 51, 102, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
             margin-top: 10px;
-            font-size: 1.1rem;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #ff3366, #ff66aa);
+            width: 0%;
+            transition: width 0.5s ease;
         }
         
         .log-container {
@@ -284,6 +294,22 @@
             margin-bottom: 5px;
             padding: 5px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .math-display {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            text-align: center;
+            border: 1px solid rgba(255, 102, 170, 0.3);
+        }
+        
+        .quadratic-animation {
+            font-size: 2rem;
+            margin: 10px 0;
+            color: #ffcc00;
         }
         
         @media (max-width: 768px) {
@@ -305,7 +331,7 @@
                 height: 400px;
             }
             
-            .multiplier-value {
+            .quadratic-value {
                 font-size: 2.5rem;
             }
             
@@ -318,15 +344,15 @@
 <body>
     <div class="container">
         <header>
-            <h1><i class="fas fa-infinity"></i> TESTADOR DE LAG INFINITO</h1>
-            <p class="subtitle">MULTIPLICAÇÃO EXPONENCIAL SEM LIMITES - A cada 5 segundos, a produção DOBRA PARA SEMPRE!</p>
+            <h1><i class="fas fa-square-root-alt"></i> TESTADOR DE LAG QUADRÁTICO</h1>
+            <p class="subtitle">ELEVAÇÃO AO QUADRADO - A cada 5 segundos, a quantidade de blocos é ELEVADA AO QUADRADO!</p>
         </header>
         
         <main>
             <div class="controls">
                 <div class="button-container">
                     <button id="startBtn" class="btn btn-start">
-                        <i class="fas fa-play"></i> INICIAR MULTIPLICAÇÃO INFINITA
+                        <i class="fas fa-play"></i> INICIAR QUADRATURA
                     </button>
                     <button id="stopBtn" class="btn btn-stop">
                         <i class="fas fa-stop"></i> PARAR GERAÇÃO
@@ -336,13 +362,31 @@
                     </button>
                 </div>
                 
-                <div class="multiplier-container">
-                    <div class="stat-label">MULTIPLICADOR ATUAL</div>
-                    <div id="multiplierValue" class="multiplier-value">1x</div>
-                    <div class="phase-display">
+                <div class="quadratic-container">
+                    <div class="stat-label">QUADRATURA ATUAL (x²)</div>
+                    <div id="quadraticValue" class="quadratic-value">10<sup>2</sup> = 100</div>
+                    <div class="quadratic-display">
                         Gerando <span id="blocksPerTick">10</span> blocos a cada 50ms
                         <br>
                         (<span id="blocksPerSecond">200</span> blocos/segundo)
+                    </div>
+                    <div class="quadratic-animation" id="quadraticAnimation">
+                        <span id="currentNumber">10</span>² = <span id="currentResult">100</span>
+                    </div>
+                    <div class="power-info">
+                        Próxima quadratura em: <span id="nextMultiplier">5.0</span>s
+                    </div>
+                </div>
+                
+                <div class="math-display">
+                    <div>Fórmula: <strong><span id="currentBase">10</span>² = <span id="currentSquared">100</span></strong> blocos/tick</div>
+                    <div>Próxima: <span id="nextBase">100</span>² = <span id="nextSquared">10,000</span> blocos/tick</div>
+                </div>
+                
+                <div class="progress-container">
+                    <div>Progresso para próxima quadratura:</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
                     </div>
                 </div>
                 
@@ -375,40 +419,34 @@
                         <div class="stat-label">TAXA ATUAL</div>
                     </div>
                     <div class="stat-box">
-                        <div id="nextMultiplier" class="stat-value">5.0s</div>
-                        <div class="stat-label">PRÓXIMA MULTIPLICAÇÃO</div>
+                        <div id="currentCycle" class="stat-value">Ciclo 1</div>
+                        <div class="stat-label">CICLO ATUAL</div>
                     </div>
                 </div>
                 
                 <div class="generation-info">
                     <div class="info-item">
-                        <strong>FASE ATUAL:</strong> <span id="currentPhase">1</span>
+                        <strong>BASE ATUAL:</strong> <span id="currentBaseDisplay">10</span>
                     </div>
                     <div class="info-item">
-                        <strong>BLOCO POR TICK:</strong> <span id="currentBlockPerTick">10</span>
+                        <strong>QUADRADO:</strong> <span id="currentSquareDisplay">100</span>
                     </div>
                     <div class="info-item">
-                        <strong>ESTIMATIVA TRAVAMENTO:</strong> <span id="crashEstimation">Fase 8+</span>
+                        <strong>CRESCIMENTO:</strong> <span id="growthFactor">×10</span>
                     </div>
                 </div>
                 
                 <div class="warning">
-                    <i class="fas fa-radiation"></i>
+                    <i class="fas fa-calculator"></i>
                     <div>
-                        <strong>⚠️ ALERTA DE PERIGO ⚠️</strong><br>
-                        Este teste NÃO TEM LIMITES! A cada 5 segundos, a produção dobra INFINITAMENTE.
-                        Seu navegador pode travar com multiplicadores altos. Use com cautela!
+                        <strong>⚠️ CRESCIMENTO QUADRÁTICO EXTREMO ⚠️</strong><br>
+                        A cada 5 segundos, a quantidade de blocos é ELEVADA AO QUADRADO!<br>
+                        Ciclo 1: 10² = 100/tick | Ciclo 2: 100² = 10,000/tick | Ciclo 3: 10,000² = 100,000,000/tick!
                     </div>
                 </div>
                 
-                <div class="crash-prediction">
-                    <i class="fas fa-exclamation-triangle"></i> 
-                    <strong>INFORMAÇÃO:</strong> 
-                    <span id="crashPrediction">Multiplicador: 1x (10 blocos/50ms)</span>
-                </div>
-                
                 <div class="log-container" id="logContainer">
-                    <div class="log-entry">Sistema inicializado. Aguardando início...</div>
+                    <div class="log-entry">Sistema inicializado. Crescimento quadrático: x → x².</div>
                 </div>
             </div>
             
@@ -418,9 +456,9 @@
         </main>
         
         <footer>
-            <p>TESTADOR DE LAG INFINITO &copy; 2023 | MULTIPLICAÇÃO EXPONENCIAL SEM LIMITES - PRODUÇÃO DOBRA A CADA 5s</p>
+            <p>TESTADOR DE LAG QUADRÁTICO &copy; 2023 | CRESCIMENTO: x → x² A CADA 5 SEGUNDOS</p>
             <p style="margin-top: 5px; font-size: 0.8rem;">
-                <i class="fas fa-calculator"></i> Progressão: 10 → 20 → 40 → 80 → 160 → 320 → 640 → 1,280 → 2,560 → 5,120 → ∞
+                <i class="fas fa-chart-line"></i> Progressão: 10 → 100 → 10,000 → 100,000,000 → 10,000,000,000,000 → ...
             </p>
         </footer>
     </div>
@@ -431,8 +469,9 @@
         let scene, camera, renderer;
         let blocks = [];
         let generationInterval = null;
-        let multiplierInterval = null;
+        let quadraticInterval = null;
         let timerInterval = null;
+        let progressInterval = null;
         let blockCount = 0;
         let totalGenerated = 0;
         let startTime = 0;
@@ -440,11 +479,13 @@
         let fps = 60;
         let frameCount = 0;
         let lastFpsUpdate = performance.now();
-        let multiplier = 1;
-        let blocksPerTick = 10;
-        let blocksPerSecond = 200;
+        let currentBase = 10; // Valor base que será elevado ao quadrado
+        let blocksPerTick = currentBase; // Inicia com 10
+        let blocksPerSecond = blocksPerTick * 20; // 20 ticks por segundo
+        let cycle = 1; // Contador de ciclos de quadratura
         let logEntries = [];
-        let nextMultiplierTime = 0;
+        let nextQuadraticTime = 0;
+        let quadraticStartTime = 0;
         
         // Elementos do DOM
         const startBtn = document.getElementById('startBtn');
@@ -455,15 +496,23 @@
         const fpsCounterElement = document.getElementById('fpsCounter');
         const timerValueElement = document.getElementById('timerValue');
         const sceneContainer = document.getElementById('scene');
-        const multiplierValue = document.getElementById('multiplierValue');
+        const quadraticValue = document.getElementById('quadraticValue');
         const blocksPerTickElement = document.getElementById('blocksPerTick');
         const blocksPerSecondElement = document.getElementById('blocksPerSecond');
         const generationRateElement = document.getElementById('generationRate');
-        const currentPhase = document.getElementById('currentPhase');
-        const currentBlockPerTick = document.getElementById('currentBlockPerTick');
-        const crashEstimationElement = document.getElementById('crashEstimation');
-        const crashPrediction = document.getElementById('crashPrediction');
-        const nextMultiplierElement = document.getElementById('nextMultiplier');
+        const currentBaseDisplay = document.getElementById('currentBaseDisplay');
+        const currentSquareDisplay = document.getElementById('currentSquareDisplay');
+        const currentBaseElem = document.getElementById('currentBase');
+        const currentSquared = document.getElementById('currentSquared');
+        const nextBase = document.getElementById('nextBase');
+        const nextSquared = document.getElementById('nextSquared');
+        const nextMultiplier = document.getElementById('nextMultiplier');
+        const currentCycle = document.getElementById('currentCycle');
+        const currentNumber = document.getElementById('currentNumber');
+        const currentResult = document.getElementById('currentResult');
+        const quadraticAnimation = document.getElementById('quadraticAnimation');
+        const growthFactor = document.getElementById('growthFactor');
+        const progressFill = document.getElementById('progressFill');
         const logContainer = document.getElementById('logContainer');
         const performanceWarning = document.getElementById('performanceWarning');
         
@@ -471,7 +520,7 @@
         function initScene() {
             // Criar cena
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x000011);
+            scene.background = new THREE.Color(0x110022);
             
             // Criar câmera
             camera = new THREE.PerspectiveCamera(75, sceneContainer.clientWidth / sceneContainer.clientHeight, 0.1, 100000);
@@ -497,20 +546,20 @@
             scene.add(directionalLight);
             
             // Adicionar luzes coloridas
-            const redLight = new THREE.PointLight(0xff0000, 2, 1000);
-            redLight.position.set(100, 50, 0);
-            scene.add(redLight);
+            const pinkLight = new THREE.PointLight(0xff66aa, 2, 1000);
+            pinkLight.position.set(100, 50, 0);
+            scene.add(pinkLight);
             
-            const blueLight = new THREE.PointLight(0x0000ff, 2, 1000);
-            blueLight.position.set(-100, 50, 0);
-            scene.add(blueLight);
+            const purpleLight = new THREE.PointLight(0xcc00ff, 2, 1000);
+            purpleLight.position.set(-100, 50, 0);
+            scene.add(purpleLight);
             
-            const greenLight = new THREE.PointLight(0x00ff00, 2, 1000);
-            greenLight.position.set(0, 50, 100);
-            scene.add(greenLight);
+            const yellowLight = new THREE.PointLight(0xffcc00, 2, 1000);
+            yellowLight.position.set(0, 50, 100);
+            scene.add(yellowLight);
             
             // Adicionar grade
-            const gridHelper = new THREE.GridHelper(1000, 100, 0x888888, 0x444444);
+            const gridHelper = new THREE.GridHelper(1000, 100, 0x8844aa, 0x442266);
             scene.add(gridHelper);
             
             // Adicionar controles de órbita
@@ -534,6 +583,8 @@
             animate();
             
             addLog("Cena 3D inicializada com sucesso");
+            addLog("Modo quadrático: x → x² (elevação ao quadrado)");
+            addLog("Ciclo inicial: 10² = 100 blocos por tick");
         }
         
         // Redimensionar a cena quando a janela for redimensionada
@@ -561,23 +612,25 @@
         
         // Criar um bloco 3D
         function createBlock() {
-            // Criar geometria do bloco
-            const baseSize = 0.5;
-            const sizeMultiplier = Math.max(0.1, 1 - (blockCount / 10000));
-            const size = baseSize * sizeMultiplier + Math.random() * 0.5;
+            // Tamanho diminui drasticamente com mais blocos
+            const baseSize = 0.3;
+            const sizeMultiplier = Math.max(0.01, 1 - (blockCount / 100000));
+            const size = baseSize * sizeMultiplier + Math.random() * 0.2;
             
             const geometry = new THREE.BoxGeometry(size, size, size);
             
-            // Cor baseada no multiplicador
-            const hue = (multiplier * 30) % 360;
-            const color = new THREE.Color(`hsl(${hue}, 100%, 50%)`);
+            // Cor baseada no ciclo
+            const hue = (cycle * 40) % 360;
+            const saturation = 80 + (cycle % 20);
+            const lightness = 30 + ((cycle * 5) % 40);
+            const color = new THREE.Color(`hsl(${hue}, ${saturation}%, ${lightness}%)`);
             
             const material = new THREE.MeshPhongMaterial({ 
                 color: color,
-                shininess: 30,
+                shininess: 20,
                 specular: 0x222222,
                 emissive: color,
-                emissiveIntensity: 0.2
+                emissiveIntensity: 0.1 + (cycle * 0.02)
             });
             
             // Criar malha
@@ -585,14 +638,16 @@
             block.castShadow = true;
             block.receiveShadow = true;
             
-            // Posicionar em esfera
-            const radius = 50 + (multiplier * 5);
-            const phi = Math.random() * Math.PI * 2;
-            const theta = Math.random() * Math.PI;
+            // Posicionar em padrão cúbico para visualização quadrática
+            const gridSize = Math.ceil(Math.sqrt(blocksPerTick)) || 1;
+            const index = totalGenerated % (gridSize * gridSize);
+            const gridX = (index % gridSize) - (gridSize / 2);
+            const gridZ = Math.floor(index / gridSize) - (gridSize / 2);
+            const spacing = 1.5;
             
-            block.position.x = radius * Math.sin(theta) * Math.cos(phi);
-            block.position.y = radius * Math.sin(theta) * Math.sin(phi);
-            block.position.z = radius * Math.cos(theta);
+            block.position.x = gridX * spacing;
+            block.position.z = gridZ * spacing;
+            block.position.y = (Math.random() - 0.5) * 10;
             
             // Rotação aleatória
             block.rotation.x = Math.random() * Math.PI;
@@ -606,13 +661,14 @@
             blocks.push({
                 mesh: block,
                 rotationSpeed: {
-                    x: (Math.random() - 0.5) * 0.1 * Math.min(multiplier, 10),
-                    y: (Math.random() - 0.5) * 0.1 * Math.min(multiplier, 10),
-                    z: (Math.random() - 0.5) * 0.1 * Math.min(multiplier, 10)
+                    x: (Math.random() - 0.5) * 0.03 * (1 + cycle * 0.2),
+                    y: (Math.random() - 0.5) * 0.03 * (1 + cycle * 0.2),
+                    z: (Math.random() - 0.5) * 0.03 * (1 + cycle * 0.2)
                 },
-                floatSpeed: Math.random() * 0.05 * Math.min(multiplier, 10),
+                floatSpeed: Math.random() * 0.02 * (1 + cycle * 0.1),
                 floatDirection: Math.random() * Math.PI * 2,
-                creationTime: Date.now()
+                creationTime: Date.now(),
+                cycleCreated: cycle
             });
             
             // Atualizar contadores
@@ -622,27 +678,27 @@
             updateBlockCountDisplay();
             
             // Log periódico
-            if (totalGenerated % 1000 === 0) {
-                addLog(`${totalGenerated.toLocaleString()} blocos gerados (Multiplicador: ${multiplier}x)`);
+            if (totalGenerated % 10000 === 0) {
+                addLog(`${totalGenerated.toLocaleString()} blocos gerados (Ciclo: ${cycle})`);
             }
         }
         
-        // Gerar blocos baseado no multiplicador atual
+        // Gerar blocos baseado no valor atual
         function generateBlocks() {
             const startGenerationTime = Date.now();
             let generated = 0;
             
-            // Gerar blocos em lotes para não travar o processo principal
-            const batchSize = Math.min(blocksPerTick, 1000);
+            // Limitar por segurança - crescimento quadrático é EXTREMAMENTE rápido
+            const safeLimit = Math.min(blocksPerTick, 5000);
             
-            for (let i = 0; i < batchSize; i++) {
+            for (let i = 0; i < safeLimit; i++) {
                 createBlock();
                 generated++;
                 
-                // Pausar brevemente a cada 100 blocos para não congelar a UI
-                if (i % 100 === 0 && i > 0) {
+                // Pausar brevemente a cada 500 blocos para não congelar a UI
+                if (i % 500 === 0 && i > 0) {
                     const elapsed = Date.now() - startGenerationTime;
-                    if (elapsed > 16) {
+                    if (elapsed > 16) { // Mais de um frame
                         break;
                     }
                 }
@@ -655,50 +711,120 @@
             updatePerformanceEstimation();
         }
         
-        // Aumentar o multiplicador infinitamente
-        function increaseMultiplier() {
-            multiplier++;
+        // Aplicar quadratura (elevar ao quadrado)
+        function applyQuadratic() {
+            // Armazenar valor antigo para cálculo de crescimento
+            const oldBase = currentBase;
+            
+            // Elevar ao quadrado
+            currentBase = Math.pow(currentBase, 2);
+            cycle++;
+            
+            // Calcular novo valor
+            const squaredValue = currentBase;
+            const nextSquaredValue = Math.pow(currentBase, 2);
             
             // Atualizar valores
-            blocksPerTick = 10 * Math.pow(2, multiplier - 1);
+            blocksPerTick = squaredValue;
             blocksPerSecond = blocksPerTick * 20;
             
+            // Calcular fator de crescimento
+            const growthRate = squaredValue / oldBase;
+            
             // Atualizar displays
-            multiplierValue.textContent = multiplier + "x";
-            blocksPerTickElement.textContent = blocksPerTick.toLocaleString();
-            blocksPerSecondElement.textContent = blocksPerSecond.toLocaleString();
-            currentPhase.textContent = multiplier;
-            currentBlockPerTick.textContent = blocksPerTick.toLocaleString();
+            quadraticValue.innerHTML = `${formatNumber(oldBase)}<sup>2</sup> = ${formatNumber(squaredValue)}`;
+            blocksPerTickElement.textContent = formatNumber(squaredValue);
+            blocksPerSecondElement.textContent = formatNumber(blocksPerSecond);
+            currentBaseDisplay.textContent = formatNumber(squaredValue);
+            currentSquareDisplay.textContent = formatNumber(squaredValue);
+            currentBaseElem.textContent = formatNumber(oldBase);
+            currentSquared.textContent = formatNumber(squaredValue);
+            nextBase.textContent = formatNumber(squaredValue);
+            nextSquared.textContent = formatNumber(nextSquaredValue);
+            currentCycle.textContent = `Ciclo ${cycle}`;
+            currentNumber.textContent = formatNumber(oldBase);
+            currentResult.textContent = formatNumber(squaredValue);
+            growthFactor.textContent = `×${formatNumber(growthRate)}`;
+            
+            // Animação de quadratura
+            animateQuadratic(oldBase, squaredValue);
             
             // Efeito visual
-            multiplierValue.style.transform = 'scale(1.5)';
-            multiplierValue.style.color = getMultiplierColor(multiplier);
+            quadraticValue.style.transform = 'scale(1.3)';
+            quadraticValue.style.color = getCycleColor(cycle);
             
             setTimeout(() => {
-                multiplierValue.style.transform = 'scale(1)';
-            }, 300);
+                quadraticValue.style.transform = 'scale(1)';
+            }, 500);
             
             // Som de alerta
-            playMultiplierSound();
+            playQuadraticSound();
             
             // Log
-            addLog(`Multiplicador aumentado: ${multiplier}x (${blocksPerTick.toLocaleString()} blocos/50ms)`);
+            addLog(`QUADRATURA APLICADA: ${formatNumber(oldBase)}² = ${formatNumber(squaredValue)} blocos/tick`);
+            addLog(`Ciclo ${cycle}: ${formatNumber(squaredValue)} blocos por tick`);
             
-            // Atualizar tempo para próxima multiplicação
-            updateNextMultiplierTime();
+            // Resetar tempo para próxima quadratura
+            quadraticStartTime = Date.now();
+            nextQuadraticTime = quadraticStartTime + 5000;
+            updateNextQuadraticTime();
         }
         
-        // Obter cor baseada no multiplicador
-        function getMultiplierColor(multiplier) {
-            if (multiplier < 5) return '#ff9900';
-            if (multiplier < 10) return '#ff5500';
-            if (multiplier < 15) return '#ff0000';
-            if (multiplier < 20) return '#ff00ff';
+        // Animação de quadratura
+        function animateQuadratic(oldValue, newValue) {
+            quadraticAnimation.style.fontSize = '3rem';
+            quadraticAnimation.style.color = '#ffcc00';
+            quadraticAnimation.style.transform = 'scale(1.2)';
+            
+            setTimeout(() => {
+                quadraticAnimation.style.fontSize = '2rem';
+                quadraticAnimation.style.color = '#ffcc00';
+                quadraticAnimation.style.transform = 'scale(1)';
+            }, 1000);
+        }
+        
+        // Formatar número para exibição
+        function formatNumber(num) {
+            if (num >= 1e12) return (num / 1e12).toFixed(2) + 'T';
+            if (num >= 1e9) return (num / 1e9).toFixed(2) + 'B';
+            if (num >= 1e6) return (num / 1e6).toFixed(2) + 'M';
+            if (num >= 1e3) return (num / 1e3).toFixed(1) + 'K';
+            return num.toString();
+        }
+        
+        // Atualizar barra de progresso para próxima quadratura
+        function updateProgressBar() {
+            if (!isRunning) return;
+            
+            const now = Date.now();
+            const elapsed = now - quadraticStartTime;
+            const total = 5000; // 5 segundos
+            const progress = Math.min(100, (elapsed / total) * 100);
+            
+            progressFill.style.width = `${progress}%`;
+            
+            // Atualizar tempo restante
+            updateNextQuadraticTime();
+        }
+        
+        // Atualizar tempo para próxima quadratura
+        function updateNextQuadraticTime() {
+            const now = Date.now();
+            const timeUntilNext = Math.max(0, nextQuadraticTime - now);
+            nextMultiplier.textContent = (timeUntilNext / 1000).toFixed(1);
+        }
+        
+        // Obter cor baseada no ciclo
+        function getCycleColor(cycle) {
+            if (cycle < 3) return '#ff3366';
+            if (cycle < 5) return '#ff66aa';
+            if (cycle < 7) return '#ffcc00';
+            if (cycle < 9) return '#00ffaa';
             return '#ffffff';
         }
         
-        // Tocar som de multiplicador
-        function playMultiplierSound() {
+        // Tocar som de quadratura
+        function playQuadraticSound() {
             try {
                 const audioContext = new (window.AudioContext || window.webkitAudioContext)();
                 const oscillator = audioContext.createOscillator();
@@ -707,11 +833,12 @@
                 oscillator.connect(gainNode);
                 gainNode.connect(audioContext.destination);
                 
-                oscillator.frequency.value = 220 + (multiplier * 50);
-                gainNode.gain.value = Math.min(0.3, 0.05 * multiplier);
+                // Frequência que sobe com o ciclo
+                oscillator.frequency.value = 110 * Math.pow(1.5, cycle);
+                gainNode.gain.value = Math.min(0.3, 0.05 * cycle);
                 
                 oscillator.start();
-                oscillator.stop(audioContext.currentTime + 0.2);
+                oscillator.stop(audioContext.currentTime + 0.4);
             } catch (e) {
                 // Ignorar erros de áudio
             }
@@ -719,20 +846,13 @@
         
         // Atualizar a exibição do contador de blocos
         function updateBlockCountDisplay() {
-            blockCountElement.textContent = blockCount.toLocaleString();
-            totalGeneratedElement.textContent = totalGenerated.toLocaleString();
+            blockCountElement.textContent = formatNumber(blockCount);
+            totalGeneratedElement.textContent = formatNumber(totalGenerated);
             
             // Atualizar botão de limpar
-            if (blockCount % 500 === 0) {
+            if (blockCount % 10000 === 0) {
                 updateClearButtonText();
             }
-        }
-        
-        // Atualizar tempo para próxima multiplicação
-        function updateNextMultiplierTime() {
-            const now = Date.now();
-            const timeUntilNext = Math.max(0, nextMultiplierTime - now);
-            nextMultiplierElement.textContent = (timeUntilNext / 1000).toFixed(1) + 's';
         }
         
         // Atualizar taxa de geração
@@ -742,30 +862,22 @@
             
             if (elapsedSeconds > 1) {
                 const currentRate = Math.round(totalGenerated / elapsedSeconds);
-                generationRateElement.textContent = currentRate.toLocaleString() + '/s';
+                generationRateElement.textContent = formatNumber(currentRate) + '/s';
             }
         }
         
         // Atualizar estimativa de performance
         function updatePerformanceEstimation() {
-            let estimation = "";
-            if (multiplier < 5) {
-                estimation = "Performance estável";
-            } else if (multiplier < 8) {
-                estimation = "Performance moderada";
-            } else if (multiplier < 12) {
-                estimation = "Performance baixa";
+            if (fps < 10 && cycle > 2) {
+                showPerformanceWarning();
             } else {
-                estimation = "Performance crítica";
+                hidePerformanceWarning();
             }
-            
-            crashEstimationElement.textContent = estimation;
-            crashPrediction.textContent = `Multiplicador: ${multiplier}x (${blocksPerTick.toLocaleString()} blocos/50ms)`;
         }
         
         // Atualizar o texto do botão de limpar
         function updateClearButtonText() {
-            clearBtn.innerHTML = `<i class="fas fa-trash-alt"></i> LIMPAR TUDO (${blockCount.toLocaleString()})`;
+            clearBtn.innerHTML = `<i class="fas fa-trash-alt"></i> LIMPAR TUDO (${formatNumber(blockCount)})`;
         }
         
         // Mostrar aviso de performance
@@ -782,34 +894,45 @@
             }
         }
         
-        // Iniciar a multiplicação infinita
-        function startInfiniteLag() {
+        // Iniciar a quadratura
+        function startQuadratic() {
             if (isRunning) return;
             
             isRunning = true;
             startTime = Date.now();
-            nextMultiplierTime = startTime + 5000;
+            quadraticStartTime = startTime;
+            nextQuadraticTime = startTime + 5000;
             
             // Resetar valores
-            multiplier = 1;
-            blocksPerTick = 10;
-            blocksPerSecond = 200;
+            currentBase = 10;
+            cycle = 1;
+            blocksPerTick = Math.pow(currentBase, 2); // 10² = 100
+            blocksPerSecond = blocksPerTick * 20;
             
             // Atualizar displays
-            multiplierValue.textContent = "1x";
-            blocksPerTickElement.textContent = "10";
-            blocksPerSecondElement.textContent = "200";
-            currentPhase.textContent = "1";
-            currentBlockPerTick.textContent = "10";
-            multiplierValue.style.color = getMultiplierColor(1);
+            quadraticValue.innerHTML = `10<sup>2</sup> = 100`;
+            blocksPerTickElement.textContent = "100";
+            blocksPerSecondElement.textContent = "2,000";
+            currentBaseDisplay.textContent = "100";
+            currentSquareDisplay.textContent = "100";
+            currentBaseElem.textContent = "10";
+            currentSquared.textContent = "100";
+            nextBase.textContent = "100";
+            nextSquared.textContent = "10,000";
+            currentCycle.textContent = `Ciclo 1`;
+            currentNumber.textContent = "10";
+            currentResult.textContent = "100";
+            growthFactor.textContent = "×10";
+            quadraticValue.style.color = getCycleColor(1);
+            
+            // Resetar barra de progresso
+            progressFill.style.width = "0%";
             
             // Iniciar intervalos
-            generationInterval = setInterval(generateBlocks, 50);
-            multiplierInterval = setInterval(increaseMultiplier, 5000);
+            generationInterval = setInterval(generateBlocks, 50); // 50ms
+            quadraticInterval = setInterval(applyQuadratic, 5000); // 5 segundos
             timerInterval = setInterval(updateTimer, 100);
-            
-            // Atualizar tempo da próxima multiplicação periodicamente
-            setInterval(updateNextMultiplierTime, 100);
+            progressInterval = setInterval(updateProgressBar, 100);
             
             // Atualizar interface
             startBtn.disabled = true;
@@ -818,16 +941,17 @@
             // Esconder aviso de performance
             hidePerformanceWarning();
             
-            addLog("Iniciando multiplicação infinita");
-            addLog("Fase 1: 10 blocos a cada 50ms (200/s)");
-            addLog("Multiplicação automática a cada 5 segundos");
+            addLog("Iniciando crescimento quadrático: x → x²");
+            addLog("Ciclo 1: 10² = 100 blocos por tick (2,000 blocos/segundo)");
+            addLog("A cada 5 segundos, o valor é elevado ao quadrado");
+            addLog("Próximo ciclo: 100² = 10,000 blocos por tick");
         }
         
         // Parar a geração
-        function stopInfiniteLag() {
+        function stopQuadratic() {
             if (!isRunning) return;
             
-            addLog("Parando multiplicação infinita...");
+            addLog("Parando crescimento quadrático...");
             
             isRunning = false;
             
@@ -838,14 +962,19 @@
                     generationInterval = null;
                 }
                 
-                if (multiplierInterval) {
-                    clearInterval(multiplierInterval);
-                    multiplierInterval = null;
+                if (quadraticInterval) {
+                    clearInterval(quadraticInterval);
+                    quadraticInterval = null;
                 }
                 
                 if (timerInterval) {
                     clearInterval(timerInterval);
                     timerInterval = null;
+                }
+                
+                if (progressInterval) {
+                    clearInterval(progressInterval);
+                    progressInterval = null;
                 }
             } catch (e) {
                 addLog("Erro ao parar intervalos: " + e.message);
@@ -858,9 +987,10 @@
             // Esconder aviso de performance
             hidePerformanceWarning();
             
-            addLog(`Multiplicação parada. Fase final: ${multiplier}x`);
-            addLog(`Total de blocos gerados: ${totalGenerated.toLocaleString()}`);
-            addLog(`Blocos na cena: ${blockCount.toLocaleString()}`);
+            addLog(`Crescimento quadrático parado. Ciclo final: ${cycle}`);
+            addLog(`Valor final: ${formatNumber(currentBase)} blocos/tick`);
+            addLog(`Total de blocos gerados: ${formatNumber(totalGenerated)}`);
+            addLog(`Blocos na cena: ${formatNumber(blockCount)}`);
         }
         
         // Limpar todos os blocos
@@ -869,15 +999,15 @@
             
             // Confirmar se há muitos blocos
             if (blockCount > 1000) {
-                if (!confirm(`Isso removerá ${blockCount.toLocaleString()} blocos 3D. Continuar?`)) {
+                if (!confirm(`Isso removerá ${formatNumber(blockCount)} blocos 3D. Continuar?`)) {
                     return;
                 }
             }
             
-            addLog(`Iniciando limpeza de ${blockCount.toLocaleString()} blocos...`);
+            addLog(`Iniciando limpeza de ${formatNumber(blockCount)} blocos...`);
             const startClearTime = Date.now();
             
-            // Operação em lotes para não travar completamente
+            // Operação em lotes
             let cleared = 0;
             const clearBatch = () => {
                 const batchSize = Math.min(100, blocks.length);
@@ -907,7 +1037,7 @@
                     setTimeout(clearBatch, 10);
                 } else {
                     const clearTime = Date.now() - startClearTime;
-                    addLog(`Limpeza concluída em ${clearTime}ms. ${cleared.toLocaleString()} blocos removidos.`);
+                    addLog(`Limpeza concluída em ${clearTime}ms. ${formatNumber(cleared)} blocos removidos.`);
                     
                     // Forçar coleta de lixo se disponível
                     if (window.gc) {
@@ -938,17 +1068,16 @@
                 // Cor baseada no FPS
                 if (fps < 5) {
                     fpsCounterElement.style.color = "#ff0000";
-                    showPerformanceWarning();
                 } else if (fps < 15) {
                     fpsCounterElement.style.color = "#ff5500";
-                    showPerformanceWarning();
                 } else if (fps < 30) {
                     fpsCounterElement.style.color = "#ffaa00";
-                    hidePerformanceWarning();
                 } else {
                     fpsCounterElement.style.color = "#00ffaa";
-                    hidePerformanceWarning();
                 }
+                
+                // Atualizar estimativa de performance
+                updatePerformanceEstimation();
                 
                 frameCount = 0;
                 lastFpsUpdate = currentTime;
@@ -962,35 +1091,34 @@
             // Atualizar FPS
             updateFPS();
             
-            // Animar blocos (com otimização)
+            // Animar blocos (com otimização extrema)
             if (blocks.length > 0) {
                 let skipFactor = 1;
-                if (blocks.length > 10000) skipFactor = 10;
-                else if (blocks.length > 5000) skipFactor = 5;
-                else if (blocks.length > 2000) skipFactor = 3;
-                else if (blocks.length > 1000) skipFactor = 2;
+                if (blocks.length > 100000) skipFactor = 50;
+                else if (blocks.length > 50000) skipFactor = 20;
+                else if (blocks.length > 20000) skipFactor = 10;
+                else if (blocks.length > 10000) skipFactor = 5;
+                else if (blocks.length > 5000) skipFactor = 3;
+                else if (blocks.length > 2000) skipFactor = 2;
                 
                 for (let i = 0; i < blocks.length; i += skipFactor) {
                     const block = blocks[i];
                     
-                    // Rotação
-                    block.mesh.rotation.x += block.rotationSpeed.x;
-                    block.mesh.rotation.y += block.rotationSpeed.y;
-                    block.mesh.rotation.z += block.rotationSpeed.z;
+                    // Rotação baseada no ciclo de criação
+                    const cycleFactor = 1 + (block.cycleCreated * 0.1);
+                    block.mesh.rotation.x += block.rotationSpeed.x * cycleFactor;
+                    block.mesh.rotation.y += block.rotationSpeed.y * cycleFactor;
                     
                     // Flutuação
-                    block.floatDirection += 0.02;
-                    const floatOffset = Math.sin(block.floatDirection) * 0.1 * block.floatSpeed;
-                    block.mesh.position.x += floatOffset * 0.1;
-                    block.mesh.position.y += floatOffset * 0.2;
-                    block.mesh.position.z += floatOffset * 0.1;
+                    block.floatDirection += 0.005 * cycleFactor;
+                    const floatOffset = Math.sin(block.floatDirection) * 0.03 * block.floatSpeed;
+                    block.mesh.position.y += floatOffset;
                     
-                    // Expansão lenta
+                    // Expansão muito lenta
                     const age = (Date.now() - block.creationTime) / 1000;
-                    if (age > 10) {
-                        const expansion = 0.001 * Math.min(multiplier, 10);
+                    if (age > 3) {
+                        const expansion = 0.0001 * Math.min(cycle, 10);
                         block.mesh.position.x *= 1 + expansion;
-                        block.mesh.position.y *= 1 + expansion;
                         block.mesh.position.z *= 1 + expansion;
                     }
                 }
@@ -1001,8 +1129,8 @@
         }
         
         // Configurar event listeners
-        startBtn.addEventListener('click', startInfiniteLag);
-        stopBtn.addEventListener('click', stopInfiniteLag);
+        startBtn.addEventListener('click', startQuadratic);
+        stopBtn.addEventListener('click', stopQuadratic);
         clearBtn.addEventListener('click', clearAllBlocks);
         
         // Desabilitar botão de parar inicialmente
@@ -1017,9 +1145,9 @@
             if (e.code === 'Space') {
                 e.preventDefault();
                 if (isRunning) {
-                    stopInfiniteLag();
+                    stopQuadratic();
                 } else {
-                    startInfiniteLag();
+                    startQuadratic();
                 }
             }
             
@@ -1028,18 +1156,23 @@
                 clearAllBlocks();
             }
             
-            // Ctrl+Shift+I para aumentar multiplicador manualmente
-            if (e.code === 'KeyI' && e.ctrlKey && e.shiftKey && isRunning) {
+            // Q para aplicar quadratura manualmente
+            if (e.code === 'KeyQ' && e.ctrlKey && isRunning) {
                 e.preventDefault();
-                increaseMultiplier();
+                applyQuadratic();
             }
         });
         
         // Informações iniciais
-        console.log("=== TESTADOR DE LAG INFINITO ===");
-        console.log("MULTIPLICAÇÃO EXPONENCIAL SEM LIMITES");
-        console.log("A cada 5 segundos, a produção DOBRA INFINITAMENTE");
-        console.log("=================================");
+        console.log("=== TESTADOR DE LAG QUADRÁTICO ===");
+        console.log("CRESCIMENTO QUADRÁTICO: x → x²");
+        console.log("A cada 5 segundos, o valor é ELEVADO AO QUADRADO");
+        console.log("Ciclo 1: 10² = 100 blocos/tick");
+        console.log("Ciclo 2: 100² = 10,000 blocos/tick");
+        console.log("Ciclo 3: 10,000² = 100,000,000 blocos/tick");
+        console.log("Ciclo 4: 100,000,000² = 10,000,000,000,000 blocos/tick");
+        console.log("AVISO: Este crescimento é EXTREMAMENTE RÁPIDO!");
+        console.log("===================================");
     </script>
 </body>
 </html>
